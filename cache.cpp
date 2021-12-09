@@ -10,10 +10,11 @@
 using namespace std;
 #define lpr pair<int,pair<int,int>>
 
-int frmcontent[3]={0,0,0},frames[3]={0,0,0}, temp[3],pages[9],curpage=0,pos[9],pgf=0,n;
-char status[9];
-int frmcontent2[3]={0,0,0},frames2[3]={0,0,0}, temp2[3],curpage2=0,pos2[9],pgf2=0;
-char status2[9];
+
+int frmcontent[3]={0,0,0},frames[3]={0,0,0}, temp[3],pages[9],pos[9],curpage=0,pgf=0,n;
+string status;
+int frmcontent2[3]={0,0,0},frames2[3]={0,0,0}, temp2[3],pos2[9],curpage2=0,pgf2=0;
+string status2;
 int diffx=0,diffy=0,i=0,window_id,window_id_2;
 int diffx2=0,diffy2=0;
 unordered_map<int, pair<int,int>> mp;
@@ -43,7 +44,7 @@ void drawText(string s,float x,float y,float z)
 
 void clrsc()
 {
-    if(strcmp(status,"HIT")==0)
+    if((status=="HIT"))
     {
          glClearColor(0,0,0,0);
          glClear(GL_COLOR_BUFFER_BIT);
@@ -81,7 +82,7 @@ void clrsc()
 
 void clrsc2()
 {
-    if(strcmp(status2,"HIT")==0)
+    if((status2=="HIT"))
     {
          glClearColor(0,0,0,0);
          glClear(GL_COLOR_BUFFER_BIT);
@@ -117,7 +118,7 @@ void clrsc2()
     }
 }
 
-int lru(int pages[9],int cpg)               //returns position to fill page in
+int lru(int cpg)               //returns position to fill page in
 {
     int m, n, position, k, l;
 	int a = 0, b = 0;
@@ -178,7 +179,7 @@ bool comp(lpr a, lpr b)
     return a.second.second<b.second.second;
 }
 
-int lfu(int pages[9],int cpg)               //returns position to fill page in
+int lfu(int cpg)               //returns position to fill page in
 {
     int m, n, position, k, l;
 	int a = 0, b = 0;
@@ -236,17 +237,17 @@ void boxpush(int x)
 	diffy-=10;
     if(pos[curpage]==0&&diffy>-200)                 //if curpage is inserted to frame 1
     {
-        strcpy(status,"FAULT");
+        (status="FAULT");
         glutPostRedisplay();                        //redisplay after each change in position
     }
     else if(pos[curpage]==1&&diffy>-300)             //if curpage is inserted to frame 2
     {
-        strcpy(status,"FAULT");
+        (status="FAULT");
         glutPostRedisplay();
     }
     else if(pos[curpage]==2&&diffy>-380)             //if curpage is inserted to frame 3
     {
-        strcpy(status,"FAULT");
+        (status="FAULT");
         glutPostRedisplay();
     }
      else if(pos[curpage]==-1&&diffx<550)           //if curpage is hit
@@ -254,7 +255,7 @@ void boxpush(int x)
         usleep(50000);
         diffy=0;
         diffx+=20;
-        strcpy(status,"HIT");
+        (status="HIT");
         glutPostRedisplay();
     }
     else                                            //move to next page
@@ -290,17 +291,17 @@ void boxpush2(int x)
 	diffy2-=10;
     if(pos2[curpage2]==0&&diffy2>-200)                 //if curpage is inserted to frame 1
     {
-        strcpy(status2,"FAULT");
+        (status2="FAULT");
         glutPostRedisplay();                        //redisplay after each change in position
     }
     else if(pos2[curpage2]==1&&diffy2>-300)             //if curpage is inserted to frame 2
     {
-        strcpy(status2,"FAULT");
+        (status2="FAULT");
         glutPostRedisplay();
     }
     else if(pos2[curpage2]==2&&diffy2>-380)             //if curpage is inserted to frame 3
     {
-        strcpy(status2,"FAULT");
+        (status2="FAULT");
         glutPostRedisplay();
     }
      else if(pos2[curpage2]==-1&&diffx2<550)           //if curpage is hit
@@ -308,7 +309,7 @@ void boxpush2(int x)
         usleep(50000);
         diffy2=0;
         diffx2+=20;
-        strcpy(status2,"HIT");
+        (status2="HIT");
         glutPostRedisplay();
     }
     else                                            //move to next page
@@ -490,7 +491,7 @@ int main(int argc,char **argv)
     printf("\nPAGE NO.\tINSERTED INTO FRAME NO.\t\tFRAME STATE\n");
     for(i=0;i<n;i++)
     {
-         pos[i]=lru(pages,i);
+         pos[i]=lru(i);
          printf("   %d\t\t\t %d\t\t\t   %d %d %d\n",pages[i],pos[i]+1,frames[0],frames[1],frames[2]);
     }
     printf("\nPAGE FAULTS=%d\n",pgf);
@@ -499,7 +500,7 @@ int main(int argc,char **argv)
     printf("\nPAGE NO.\tINSERTED INTO FRAME NO.\t\tFRAME STATE\n");
     for(i=0;i<n;i++)
     {
-         pos2[i]=lfu(pages,i);
+         pos2[i]=lfu(i);
          printf("   %d\t\t\t %d\t\t\t   %d %d %d\n",pages[i],pos2[i]+1,frames2[0],frames2[1],frames2[2]);
     }
     printf("\nPAGE FAULTS=%d\n",pgf2);
