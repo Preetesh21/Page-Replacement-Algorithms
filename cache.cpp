@@ -1,19 +1,14 @@
 #include<GL/gl.h>
 #include<GL/glut.h>
-#include<stdlib.h>
 #include<unistd.h>
-#include<stdio.h>
-#include<string.h>
-#include<math.h>
-#include<time.h>
 #include <bits/stdc++.h>
 using namespace std;
 #define lpr pair<int,pair<int,int>>
 
-
-int frmcontent[3]={0,0,0},frames[3]={0,0,0}, temp[3],pages[9],pos[9],curpage=0,pgf=0,n;
+// Declaration of few global variables
+int frmcontent[3]={0,0,0},frames[3]={0,0,0}, temp[3],pages[100],pos[100],curpage=0,pgf=0,n;
 string status;
-int frmcontent2[3]={0,0,0},frames2[3]={0,0,0}, temp2[3],pos2[9],curpage2=0,pgf2=0;
+int frmcontent2[3]={0,0,0},frames2[3]={0,0,0}, temp2[3],pos2[100],curpage2=0,pgf2=0;
 string status2;
 int diffx=0,diffy=0,i=0,window_id,window_id_2;
 int diffx2=0,diffy2=0;
@@ -118,6 +113,9 @@ void clrsc2()
     }
 }
 
+/*
+    LRU Implementation
+*/
 int lru(int cpg)               //returns position to fill page in
 {
     int m, n, position, k, l;
@@ -170,6 +168,9 @@ int lru(int cpg)               //returns position to fill page in
     
 }
 
+/*
+    LFU Implementation
+*/
 bool comp(lpr a, lpr b)
 {
     if(a.second.first<b.second.first)
@@ -179,7 +180,7 @@ bool comp(lpr a, lpr b)
     return a.second.second<b.second.second;
 }
 
-int lfu(int cpg)               //returns position to fill page in
+int lfu(int cpg)                                    //returns position to fill page in
 {
     int m, n, position, k, l;
 	int a = 0, b = 0;
@@ -221,7 +222,7 @@ int lfu(int cpg)               //returns position to fill page in
     return position;
 }
 
-void boxpush(int x)
+void boxpush(int x)                                 // where to push data into
 {
     glBegin(GL_POLYGON);
     glColor3f(0.8,0.84,1);                                      //initialize box with current page
@@ -275,7 +276,7 @@ void boxpush(int x)
     }
 }
 
-void boxpush2(int x)
+void boxpush2(int x)                                // where to push data into
 {
     glBegin(GL_POLYGON);
     glColor3f(0.8,0.84,1);                                      //initialize box with current page
@@ -363,7 +364,7 @@ void drawframes()                                   //draws frames with current 
 	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, frmcontent[2]+'0');
 }
 
-void drawframes2()                                   //draws frames with current content
+void drawframes2()                                  //draws frames with current content
 {
     glBegin(GL_POLYGON);
     glColor3f(0.5,0.9,0.56);
@@ -397,7 +398,7 @@ void drawframes2()                                   //draws frames with current
 	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, frmcontent2[2]+'0');
 }
 
-void drawstatus()                                               //draws status of each page
+void drawstatus()                                   //draws status of each page
 {
     glColor3f(0.99,0.94,0.6);
 	drawText("LEAST RECENTLY USED ALGORITHM!!",60,880,0);
@@ -413,7 +414,7 @@ void drawstatus()                                               //draws status o
 	drawText(status,450,200,0);
 }
 
-void drawstatus2()                                               //draws status of each page
+void drawstatus2()                                  //draws status of each page
 {
     glColor3f(0.99,0.94,0.6);
 	drawText("LEAST FREQUENTLY USED ALGORITHM!!",60,880,0);
@@ -429,7 +430,7 @@ void drawstatus2()                                               //draws status 
 	drawText(status2,450,200,0);
 }
 
-void mykey(unsigned char k, int c, int d)
+void mykey(unsigned char k, int c, int d)           // To exit from the window frame
 {
     if(k=='Q' || k=='q')
     {
@@ -438,6 +439,7 @@ void mykey(unsigned char k, int c, int d)
     }
 }
 
+// Display callback for LRU
 void disp()
 {
      glClearColor(0,0,0,0);
@@ -452,6 +454,7 @@ void disp()
      glFlush();
 }
 
+// Display callback for LFU
 void disp2()
 {
      glClearColor(0,0,0,0);
@@ -466,6 +469,7 @@ void disp2()
      glFlush();
 }
 
+// The main function
 int main(int argc,char **argv)
 {
     int i;
@@ -483,7 +487,7 @@ int main(int argc,char **argv)
     glutDisplayFunc(disp);    
     glutInitWindowSize(500,500);   
     glutInitWindowPosition(600,650);            // set a window position     
-    window_id_2 = glutCreateWindow("Window Two");
+    window_id_2 = glutCreateWindow("LEAST FREQUENTLY USED ALGORITHM");
     init();
     glutDisplayFunc(disp2);
     glutKeyboardFunc(mykey);
